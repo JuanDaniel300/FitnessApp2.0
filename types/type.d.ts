@@ -18,6 +18,7 @@ export type User = {
   edad?: number | any;
   email?: string;
   photo?: string;
+  telefono?: string;
   fecha_nacimiento?: string;
   peso?: number;
   estautra?: number;

@@ -49,8 +49,10 @@ const Login = () => {
               const userData: User = {
                 id: data.ID_INFO_USUARIO,
                 name: data.NOMBRE,
+                email: data.USUARIO,
                 perfil: res.TIPO_USUARIO,
                 edad: data.EDAD,
+                telefono: data.TELEFONO,
                 photo: data.FOTO,
                 fecha_nacimiento: data.FECHA_NACIMIENTO,
                 peso: data.PESO,

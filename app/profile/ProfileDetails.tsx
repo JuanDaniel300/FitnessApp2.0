@@ -35,9 +35,13 @@ const ProfileDetails = () => {
           <InfoItem
             icon="mail"
             label="Correo electrónico"
-            value={user?.email ?? "juandanielhernandezgarcia@gmail.com"}
+            value={user?.email}
           />
-          <InfoItem icon="phone" label="Teléfono" value="+52 123 456 7890" />
+          <InfoItem
+            icon="phone"
+            label="Teléfono"
+            value={"+52 " + user.telefono}
+          />
           <InfoItem
             icon="map-pin"
             label="Dirección"

@@ -18,7 +18,7 @@ const Result = () => {
     name: user.name,
     weight: 75, // en kg
     height: 175, // en cm
-    bmi: 24.5,
+    bmi: 22,
     caloriesGoal: 2200,
     observations:
       "El paciente muestra una buena progresión en su plan de nutrición. Se recomienda aumentar la ingesta de proteínas.",
@@ -88,7 +88,7 @@ const Result = () => {
   };
 
   return (
-    <View className="flex-1 h-full w-full items mt-16">
+    <View className="flex-1 h-full w-full items bg-white pt-[80px]">
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -100,7 +100,10 @@ const Result = () => {
           Resultados de {userResults.name}
         </Text>
 
-        <View style={styles.metricsContainer}>
+        <View
+          className="border border-gray-200 shadow-sm rounded-2xl p-2"
+          style={styles.metricsContainer}
+        >
           <View style={styles.metricItem}>
             <Icon name="weight-kilogram" size={24} color="#4A5568" />
             <Text className="font-signika" style={styles.metricValue}>
@@ -130,7 +133,10 @@ const Result = () => {
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View
+          className="border border-gray-200 shadow-sm"
+          style={styles.section}
+        >
           <Text className="font-signika" style={styles.sectionTitle}>
             Índice de Masa Corporal (IMC)
           </Text>
@@ -143,7 +149,10 @@ const Result = () => {
           {renderBmiIndicator(userResults.bmi)}
         </View>
 
-        <View style={styles.section}>
+        <View
+          className="border border-gray-200 shadow-sm"
+          style={styles.section}
+        >
           <Text className="font-signika" style={styles.sectionTitle}>
             Observaciones
           </Text>
@@ -152,7 +161,10 @@ const Result = () => {
           </Text>
         </View>
 
-        <View style={styles.section}>
+        <View
+          className="border border-gray-200 shadow-sm"
+          style={styles.section}
+        >
           <Text className="font-signika" style={styles.sectionTitle}>
             Recomendaciones
           </Text>
@@ -166,7 +178,10 @@ const Result = () => {
           ))}
         </View>
 
-        <View style={styles.section}>
+        <View
+          className="border border-gray-200 shadow-sm"
+          style={styles.section}
+        >
           <Text className="font-signika" style={styles.sectionTitle}>
             Rutina de Ejercicios
           </Text>

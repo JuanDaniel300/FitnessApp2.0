@@ -21,7 +21,7 @@ type NutritionistVisit = {
 
 // Componente para una tarjeta de visita
 const VisitCard = ({ visit }: { visit: NutritionistVisit }) => (
-  <View style={styles.card}>
+  <View className="border border-gray-200" style={styles.card}>
     <View style={styles.cardHeader}>
       <Text className="font-signika" style={styles.cardDate}>
         {visit.date}
@@ -114,7 +114,7 @@ const Tracking = () => {
   };
 
   return (
-    <View className="flex-1 h-full w-full items-center mt-16">
+    <View className="flex-1 h-full w-full items-center bg-white pt-16">
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -136,7 +136,6 @@ const Tracking = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     backgroundColor: "#F7FAFC",
   },
   scrollContent: {},
