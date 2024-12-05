@@ -1,7 +1,12 @@
 import { Colors } from "@/constants/Colors";
+import { router } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const Routine = () => {
+  const handlerGoToRoutine = () => {
+    router.navigate("/userRoutine");
+  };
+
   return (
     <View className="h-[88px] rounded-2xl shadow-sm bg-[#91c788]">
       <View className="flex flex-row h-full items-center justify-between px-5">
@@ -16,9 +21,7 @@ const Routine = () => {
         <View className="w-[50%] h-full  justify-center items-center ">
           <TouchableOpacity
             className="py-1 w-[70%] rounded-xl bg-[#d2facc]"
-            onPress={() => {
-              console.log("presddd");
-            }}
+            onPress={handlerGoToRoutine}
           >
             <Text className="text-center text-[#91c788] text-lg font-semibold">
               Ir

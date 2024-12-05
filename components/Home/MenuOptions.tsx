@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/authStore";
-import { router } from "expo-router";
+import { Navigator, router } from "expo-router";
 import React from "react";
 import {
   View,
@@ -25,17 +25,16 @@ export default function MenuScreen() {
     {
       title: "Perfil",
       icon: User,
-      onPress: () => console.log("Edit Profile pressed"),
+      onPress: () => {
+        router.navigate("/profile/ProfileDetails");
+      },
     },
     {
       title: "Planes",
       icon: Star,
-      onPress: () => console.log("Renew Plans pressed"),
-    },
-    {
-      title: "Configuracion",
-      icon: Settings,
-      onPress: () => console.log("Settings pressed"),
+      onPress: () => {
+        router.navigate("/profile/Plans");
+      },
     },
     {
       title: "Terminos & Politica de Privacidad",
@@ -67,11 +66,6 @@ export default function MenuScreen() {
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={item.title}
-            className={
-              item.title === "Terminos & Politica de Privacidad"
-                ? "border-t border-gray-100 rounded"
-                : ""
-            }
             style={[styles.menuItem]}
             onPress={item.onPress}
           >

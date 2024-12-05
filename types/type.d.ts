@@ -12,10 +12,11 @@ export type sliderList = {
 };
 
 export type User = {
-  usuario: string;
+  id: number;
   name: string;
-  perfil: number;
+  perfil: number; // 1 usuario y 2 nutriologo
   edad?: number | any;
+  email?: string;
   photo?: string;
   fecha_nacimiento?: string;
   peso?: number;

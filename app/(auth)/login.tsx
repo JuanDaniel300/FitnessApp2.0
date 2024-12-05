@@ -39,12 +39,15 @@ const Login = () => {
       API.post("?api=1", credentials)
         .then((response) => {
           const res = response.data.response;
+
+          console.log(res);
+
           switch (parseInt(res.data.AUTORIZADO)) {
             case 1:
               const data = res.data.data[0];
 
               const userData: User = {
-                usuario: data.USUARIO,
+                id: data.ID_INFO_USUARIO,
                 name: data.NOMBRE,
                 perfil: res.TIPO_USUARIO,
                 edad: data.EDAD,
