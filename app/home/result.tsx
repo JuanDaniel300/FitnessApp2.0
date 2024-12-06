@@ -1,6 +1,7 @@
+import API from "@/constants/api";
 import { useAuthStore } from "@/store/authStore";
 import { User } from "@/types/type";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +14,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Result = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const [history, setHistory] = useState([]);
   const user: User = useAuthStore((state: any) => state.user);
   const userResults = {
     name: user.name,
@@ -62,12 +64,32 @@ const Result = () => {
     return "Obesidad";
   };
 
+  useEffect(() => {
+    fecthHistory();
+  }, [history]);
+
   const onRefresh = async () => {
     setRefreshing(true);
+    await fecthHistory();
+    setRefreshing(false);
+  };
 
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+  const fecthHistory = async () => {
+    try {
+      const response = await API.post("?api=10", {
+        visualizar: 1,
+        usuario_id: user.id,
+      });
+      const info = response.data.response.data;
+
+      info.sort((a, b) => b.ID_OBSERVACION - a.ID_OBSERVACION);
+
+      const latestObservation = info[0];
+
+      setHistory(latestObservation);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const renderBmiIndicator = (bmi: number) => {
@@ -86,6 +108,19 @@ const Result = () => {
       </View>
     );
   };
+
+  if (history.length <= 0) {
+    return (
+      <View className="flex items-center justify-center h-full w-full">
+        <Text>Cargando</Text>
+      </View>
+    );
+  }
+
+  // Convertir el string de recomendaciones en un array
+  const recommendationsArray = history?.RECOMENDACIONES
+    ? history.RECOMENDACIONES.split(", ")
+    : [];
 
   return (
     <View className="flex-1 h-full w-full items bg-white pt-[80px]">
@@ -107,7 +142,7 @@ const Result = () => {
           <View style={styles.metricItem}>
             <Icon name="weight-kilogram" size={24} color="#4A5568" />
             <Text className="font-signika" style={styles.metricValue}>
-              {userResults.weight} kg
+              {history?.PESO} kg
             </Text>
             <Text className="font-signika" style={styles.metricLabel}>
               Peso
@@ -116,7 +151,7 @@ const Result = () => {
           <View style={styles.metricItem}>
             <Icon name="human-male-height" size={24} color="#4A5568" />
             <Text className="font-signika" style={styles.metricValue}>
-              {userResults.height} cm
+              {history?.ESTATURA} cm
             </Text>
             <Text className="font-signika" style={styles.metricLabel}>
               Estatura
@@ -125,7 +160,7 @@ const Result = () => {
           <View style={styles.metricItem}>
             <Icon name="fire" size={24} color="#4A5568" />
             <Text className="font-signika" style={styles.metricValue}>
-              {userResults.caloriesGoal}
+              {history?.CALORIAS}
             </Text>
             <Text className="font-signika" style={styles.metricLabel}>
               Cal/día
@@ -141,12 +176,12 @@ const Result = () => {
             Índice de Masa Corporal (IMC)
           </Text>
           <Text className="font-signika" style={styles.bmiValue}>
-            {userResults.bmi.toFixed(1)}
+            {history?.IMC}
           </Text>
           <Text className="font-signika" style={styles.bmiCategory}>
-            {getBmiCategory(userResults.bmi)}
+            {getBmiCategory(history?.IMC)}
           </Text>
-          {renderBmiIndicator(userResults.bmi)}
+          {renderBmiIndicator(history?.IMC)}
         </View>
 
         <View
@@ -157,7 +192,7 @@ const Result = () => {
             Observaciones
           </Text>
           <Text className="font-signika" style={styles.observationText}>
-            {userResults.observations}
+            {history?.OBSERVACIONES}
           </Text>
         </View>
 
@@ -168,7 +203,7 @@ const Result = () => {
           <Text className="font-signika" style={styles.sectionTitle}>
             Recomendaciones
           </Text>
-          {userResults.recommendations.map((rec, index) => (
+          {recommendationsArray.map((rec, index) => (
             <View key={index} style={styles.recommendationItem}>
               <Icon name="check-circle-outline" size={20} color="#729e6b" />
               <Text className="font-signika" style={styles.recommendationText}>

@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/store/authStore";
+import { typeUser } from "@/utils/generic";
 import { Navigator, router } from "expo-router";
 import React from "react";
 import {
@@ -18,7 +19,7 @@ import {
   ChevronRight,
 } from "react-native-feather";
 
-export default function MenuScreen() {
+export default function MenuScreen({ userType = 1 }: { userType: number }) {
   const logout = useAuthStore((state: any) => state.logout);
 
   const menuItems = [
@@ -48,6 +49,26 @@ export default function MenuScreen() {
     },
   ];
 
+  const menuNutriolog = [
+    {
+      title: "Perfil",
+      icon: User,
+      onPress: () => {
+        router.navigate("/profile/ProfileDetails");
+      },
+    },
+    {
+      title: "Terminos & Politica de Privacidad",
+      icon: FileText,
+      onPress: () => console.log("Terms pressed"),
+    },
+    {
+      title: "Salir",
+      icon: LogOut,
+      onPress: () => handleLogout(),
+    },
+  ];
+
   const handleLogout = () => {
     Alert.alert("Cerrar sesión", "¿Estás seguro de que deseas salir?", [
       { text: "Cancelar", style: "cancel" },
@@ -60,10 +81,14 @@ export default function MenuScreen() {
       },
     ]);
   };
+
+  const profileMenu =
+    userType == typeUser.nutriologo ? menuNutriolog : menuItems;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.menuContainer}>
-        {menuItems.map((item, index) => (
+        {profileMenu.map((item, index) => (
           <TouchableOpacity
             key={item.title}
             style={[styles.menuItem]}
@@ -72,7 +97,9 @@ export default function MenuScreen() {
             <View style={styles.iconContainer}>
               <item.icon stroke="#F08080" width={24} height={24} />
             </View>
-            <Text style={styles.menuText}>{item.title}</Text>
+            <Text className="" style={styles.menuText}>
+              {item.title}
+            </Text>
             <ChevronRight stroke="#CCCCCC" width={24} height={24} />
           </TouchableOpacity>
         ))}
@@ -84,7 +111,6 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   menuContainer: {
     paddingHorizontal: 16,

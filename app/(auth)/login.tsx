@@ -2,6 +2,7 @@ import API from "@/constants/api";
 import { Colors } from "@/constants/Colors";
 import { useAuthStore } from "@/store/authStore";
 import { User } from "@/types/type";
+import { typeUser } from "@/utils/generic";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import { useState } from "react";
@@ -47,10 +48,10 @@ const Login = () => {
               const data = res.data.data[0];
 
               const userData: User = {
-                id: data.ID_INFO_USUARIO,
+                id: data.ID_USUARIO,
                 name: data.NOMBRE,
                 email: data.USUARIO,
-                perfil: res.TIPO_USUARIO,
+                perfil: data.TIPO_USUARIO,
                 edad: data.EDAD,
                 telefono: data.TELEFONO,
                 photo: data.FOTO,
@@ -61,7 +62,13 @@ const Login = () => {
               };
 
               authZustand(userData);
-              router.replace("/home/home");
+
+              if (userData.perfil == typeUser.user) {
+                router.replace("/home/home");
+              } else if (userData.perfil == typeUser.nutriologo) {
+                router.replace("/nutriologo/home");
+              }
+
               break;
 
             default:

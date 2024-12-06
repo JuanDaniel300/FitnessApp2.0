@@ -21,6 +21,7 @@ const ProfileDetails = () => {
   const handleBack = () => {
     router.back();
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useFonts } from "expo-font";
+import { typeUser } from "@/utils/generic";
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -20,7 +21,11 @@ const App = () => {
 
     setTimeout(() => {
       if (user) {
-        router.replace("/home/home");
+        if (user.perfil == typeUser.user) {
+          router.replace("/home/home");
+        } else if (user.perfil == typeUser.nutriologo) {
+          router.replace("/nutriologo/home");
+        }
       }
       setIsLoader(false);
     }, 2900);
@@ -31,10 +36,18 @@ const App = () => {
   }
 
   const handlePressButton = () => {
-    if (user) {
-      router.replace("/home/home");
-    } else {
-      router.replace("/start");
+    try {
+      if (user) {
+        if (user.perfil == typeUser.user) {
+          router.replace("/home/home");
+        } else if (user.perfil == typeUser.nutriologo) {
+          router.replace("/nutriologo/home");
+        }
+      } else {
+        router.replace("/start");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

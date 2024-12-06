@@ -3,6 +3,11 @@ export const profileMan =
 export const profileWoman =
   "https://www.shareicon.net/data/128x128/2016/07/21/799353_user_512x512.png";
 
+export const typeUser = {
+  user: 1,
+  nutriologo: 2,
+};
+
 export const capitalizeFirstLetter = (string: string): string => {
   if (typeof string !== "string" || string.length === 0) {
     return string; // Devuelve el valor original si no es una cadena
@@ -17,4 +22,17 @@ export const getNames = (fullname: string): string => {
   }
 
   return `${fullNameArray[0]} ${fullNameArray[1]}`;
+};
+
+export const getNamesNutiologo = (fullname: string): string => {
+  const fullNameArray = fullname.split(" ");
+  if (typeof fullname !== "string" || fullname.length === 0) {
+    return fullname;
+  }
+
+  if (fullNameArray.length > 3) {
+    return `${fullNameArray[3]}`;
+  } else {
+    return `${fullNameArray[0]}`;
+  }
 };

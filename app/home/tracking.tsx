@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import API from "@/constants/api";
+import { useAuthStore } from "@/store/authStore";
+import { User } from "@/types/type";
+import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import {
   View,
@@ -24,7 +27,7 @@ const VisitCard = ({ visit }: { visit: NutritionistVisit }) => (
   <View className="border border-gray-200" style={styles.card}>
     <View style={styles.cardHeader}>
       <Text className="font-signika" style={styles.cardDate}>
-        {visit.date}
+        {visit?.FECHA}
       </Text>
       <Icon name="calendar" size={24} color="#91C788" />
     </View>
@@ -33,7 +36,7 @@ const VisitCard = ({ visit }: { visit: NutritionistVisit }) => (
         <View style={styles.metric}>
           <Icon name="weight-kilogram" size={24} color="#729e6b" />
           <Text className="font-signika" style={styles.metricValue}>
-            {visit.weight} kg
+            {visit?.PESO} kg
           </Text>
           <Text className="font-signika" style={styles.metricLabel}>
             Peso
@@ -42,31 +45,33 @@ const VisitCard = ({ visit }: { visit: NutritionistVisit }) => (
         <View style={styles.metric}>
           <Icon name="human-male-height" size={24} color="#729e6b" />
           <Text className="font-signika" style={styles.metricValue}>
-            {visit.bmi.toFixed(1)}
+            {visit?.ESTATURA}
           </Text>
           <Text className="font-signika" style={styles.metricLabel}>
-            IMC
+            cm
           </Text>
         </View>
         <View style={styles.metric}>
           <Icon name="percent" size={24} color="#729e6b" />
           <Text className="font-signika" style={styles.metricValue}>
-            {visit.bodyFatPercentage}%
+            {visit?.IMC}
           </Text>
           <Text className="font-signika" style={styles.metricLabel}>
-            Grasa Corporal
+            IMC
           </Text>
         </View>
       </View>
       <Text className="font-signika" style={styles.notes}>
-        {visit.notes}
+        {visit?.RECOMENDACIONES}
       </Text>
     </View>
   </View>
 );
 
 const Tracking = () => {
+  const user: User = useAuthStore((state: any) => state.user);
   const [refreshing, setRefreshing] = useState(false);
+  const [history, setHistory] = useState([]);
   const visits: NutritionistVisit[] = [
     {
       date: "15 de Mayo, 2024",
@@ -105,13 +110,39 @@ const Tracking = () => {
     },
   ];
 
+  useEffect(() => {
+    fecthHistory();
+  }, [history]);
+
   const onRefresh = async () => {
     setRefreshing(true);
-
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    await fecthHistory();
+    setRefreshing(false);
   };
+
+  const fecthHistory = async () => {
+    try {
+      const response = await API.post("?api=10", {
+        visualizar: 1,
+        usuario_id: user.id,
+      });
+      const info = response.data.response.data;
+
+      info.sort((a, b) => b.ID_OBSERVACION - a.ID_OBSERVACION);
+
+      setHistory(info);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (history.length <= 0) {
+    return (
+      <View className="flex items-center justify-center h-full w-full">
+        <Text>Cargando</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 h-full w-full items-center bg-white pt-16">
@@ -125,7 +156,7 @@ const Tracking = () => {
         <Text className="font-signika" style={styles.title}>
           Seguimiento de Progreso
         </Text>
-        {visits.map((visit, index) => (
+        {history.map((visit, index) => (
           <VisitCard key={index} visit={visit} />
         ))}
       </ScrollView>
